@@ -18,6 +18,7 @@ import { FocusTimerTab } from './components/FocusTimerTab';
 import { CitationsTab } from './components/CitationsTab';
 import { AnalyticsTab } from './components/AnalyticsTab';
 import { BookmarksTab } from './components/BookmarksTab';
+import { PresentationTab } from './components/PresentationTab';
 import { FullPageLoader } from './components/LoadingSpinner';
 import { InteractiveBackground, FloatingShapes } from './components/InteractiveBackground';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -64,6 +65,8 @@ function AppContent() {
         return <AnalyticsTab />;
       case 'bookmarks':
         return <BookmarksTab />;
+      case 'presentation':
+        return <PresentationTab />;
       default:
         return <SummaryTab />;
     }

@@ -70,6 +70,7 @@ export interface ApiResponse<T> {
 }
 
 export type TabType = 'summary' | 'flashcards' | 'quiz' | 'qa' | 'research' | 'videos' | 'resources' | 'notes' | 'citations' | 'planner' | 'concepts' | 'analytics' | 'bookmarks' | 'timer';
+export type TabType = 'summary' | 'flashcards' | 'quiz' | 'qa' | 'research' | 'videos' | 'resources' | 'notes' | 'citations' | 'planner' | 'concepts' | 'analytics' | 'bookmarks' | 'timer' | 'presentation';
 
 export interface QuizState {
   currentQuestion: number;

@@ -110,4 +110,15 @@ export const apiService = {
     const response = await api.get(`/session-info?session_id=${sessionId}`);
     return response.data;
   },
+
+  // Generate presentation
+  async generatePresentation(data: {
+    topic: string;
+    audience: string;
+    duration: number;
+    theme: string;
+  }): Promise<any> {
+    const response = await api.post('/generate-presentation', data);
+    return response.data;
+  },
 };

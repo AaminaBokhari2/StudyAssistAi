@@ -13,7 +13,8 @@ import {
   Network,
   BarChart3,
   Bookmark,
-  Timer
+  Timer,
+  Presentation
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useApp } from '../contexts/AppContext';
@@ -34,6 +35,7 @@ const tabs = [
   { id: 'concepts' as TabType, label: 'Mind Map', icon: Network, color: 'from-violet-500 to-purple-500', bgColor: 'bg-violet-50 dark:bg-violet-900/20' },
   { id: 'analytics' as TabType, label: 'Analytics', icon: BarChart3, color: 'from-emerald-500 to-green-500', bgColor: 'bg-emerald-50 dark:bg-emerald-900/20' },
   { id: 'bookmarks' as TabType, label: 'Bookmarks', icon: Bookmark, color: 'from-blue-600 to-indigo-600', bgColor: 'bg-blue-50 dark:bg-blue-900/20' },
+  { id: 'presentation' as TabType, label: 'Presentations', icon: Presentation, color: 'from-indigo-500 to-purple-600', bgColor: 'bg-indigo-50 dark:bg-indigo-900/20' },
 ];
 
 export function StudyTabs() {
