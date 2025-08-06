@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { useApp } from '../contexts/AppContext';
 import { apiService } from '../services/api';
 import { LoadingSpinner } from './LoadingSpinner';
+import { InteractiveCard } from './InteractiveCard';
+import { AnimatedIcon } from './AnimatedIcon';
 import toast from 'react-hot-toast';
 
 export function FileUpload() {
@@ -160,10 +162,10 @@ export function FileUpload() {
         <div
           {...getRootProps()}
           className={`
-            relative border-2 border-dashed rounded-3xl p-16 text-center cursor-pointer transition-all duration-500 backdrop-blur-xl
+            relative border-2 border-dashed rounded-3xl p-16 text-center cursor-pointer transition-all duration-500 backdrop-blur-xl hover-lift
             ${isDragActive 
-              ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 scale-105 shadow-2xl glow-effect' 
-              : 'border-gray-300/50 dark:border-gray-600/50 hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/10 dark:hover:to-purple-900/10 hover:shadow-xl glass-effect'
+              ? 'border-blue-500 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-800/40 dark:to-purple-800/40 scale-105 shadow-2xl pulse-glow' 
+              : 'border-blue-300 dark:border-blue-500 bg-gradient-to-br from-white/90 to-blue-50/90 dark:from-gray-800/90 dark:to-blue-900/30 hover:border-blue-500 hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/40 dark:hover:to-purple-900/40 hover:shadow-xl hover:scale-105'
             }
             ${isUploading ? 'pointer-events-none' : ''}
           `}
@@ -171,24 +173,58 @@ export function FileUpload() {
           <input {...getInputProps()} />
           
           <div className="space-y-8">
-            <motion.div 
+            <motion.div
               className="flex justify-center"
-              animate={uploadStatus === 'processing' ? { rotate: 360 } : {}}
-              transition={{ duration: 2, repeat: uploadStatus === 'processing' ? Infinity : 0, ease: "linear" }}
+              animate={uploadStatus === 'processing' ? { 
+                rotate: 360,
+                scale: [1, 1.1, 1]
+              } : {}}
+              transition={{ 
+                rotate: { duration: 2, repeat: uploadStatus === 'processing' ? Infinity : 0, ease: "linear" },
+                scale: { duration: 1, repeat: uploadStatus === 'processing' ? Infinity : 0 }
+              }}
             >
-              {getStatusIcon()}
+              <div className="relative">
+                {getStatusIcon()}
+                {uploadStatus === 'idle' && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    animate={{
+                      boxShadow: [
+                        '0 0 0 0 rgba(59, 130, 246, 0.4)',
+                        '0 0 0 20px rgba(59, 130, 246, 0)',
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeOut"
+                    }}
+                  />
+                )}
+              </div>
             </motion.div>
             
             <div>
-              <h3 className="text-3xl font-bold gradient-text mb-4">
+              <motion.h3 
+                className="text-3xl font-bold text-gray-800 dark:text-white mb-4"
+                animate={isDragActive ? { scale: 1.05 } : { scale: 1 }}
+                transition={{ duration: 0.2 }}
+              >
                 {getStatusText()}
-              </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              </motion.h3>
+              <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
                 {uploadStatus === 'idle' && (
                   <>
                     Drag and drop your PDF file here, or click to browse
                     <br />
-                    <span className="text-base text-gray-500 dark:text-gray-400 font-medium">Maximum file size: 50MB</span>
+                    <motion.span 
+                      className="text-base text-gray-600 dark:text-gray-300 font-semibold"
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      Maximum file size: 50MB
+                    </motion.span>
                   </>
                 )}
               </p>
@@ -208,9 +244,13 @@ export function FileUpload() {
                     transition={{ duration: 0.5 }}
                   />
                 </div>
-                <p className="text-base text-gray-600 dark:text-gray-300 font-semibold">
+                <motion.p 
+                  className="text-base text-gray-800 dark:text-gray-200 font-bold"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
                   {uploadProgress}% complete
-                </p>
+                </motion.p>
               </motion.div>
             )}
           </div>
@@ -223,29 +263,26 @@ export function FileUpload() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="card p-8 text-center card-hover">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 glow-effect">
-            <FileText className="w-6 h-6 text-white" />
-          </div>
-          <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-3">Smart Analysis</h4>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">AI-powered document analysis with intelligent summaries and key insights</p>
-        </div>
+        <InteractiveCard
+          title="Smart Analysis"
+          description="AI-powered document analysis with intelligent summaries and key insights"
+          icon={FileText}
+          gradient="from-emerald-500 to-teal-500"
+        />
         
-        <div className="card p-8 text-center card-hover">
-          <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 glow-effect">
-            <Brain className="w-6 h-6 text-white" />
-          </div>
-          <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-3">Study Materials</h4>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">Interactive flashcards, adaptive quizzes, and personalized Q&A assistance</p>
-        </div>
+        <InteractiveCard
+          title="Study Materials"
+          description="Interactive flashcards, adaptive quizzes, and personalized Q&A assistance"
+          icon={Brain}
+          gradient="from-purple-500 to-pink-500"
+        />
         
-        <div className="card p-8 text-center card-hover">
-          <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 glow-effect">
-            <Search className="w-6 h-6 text-white" />
-          </div>
-          <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-3">Smart Discovery</h4>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">Research papers, educational videos, and curated learning resources</p>
-        </div>
+        <InteractiveCard
+          title="Smart Discovery"
+          description="Research papers, educational videos, and curated learning resources"
+          icon={Search}
+          gradient="from-orange-500 to-red-500"
+        />
       </motion.div>
 
       <motion.div 
@@ -254,12 +291,16 @@ export function FileUpload() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full border border-blue-200/30 dark:border-purple-300/30 backdrop-blur-sm">
-          <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <motion.div 
+          className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full border border-blue-200/30 dark:border-purple-300/30 backdrop-blur-sm"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <AnimatedIcon icon={Zap} animation="pulse" size={20} color="#3b82f6" />
           <span className="text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Powered by Advanced AI Technology
           </span>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );

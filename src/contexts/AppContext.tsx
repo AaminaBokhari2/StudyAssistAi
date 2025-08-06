@@ -28,6 +28,20 @@ interface AppState {
   error: string | null;
   quizState: QuizState;
   flashcardState: FlashcardState;
+  studyNotes: StudyNote[];
+  citations: Citation[];
+  studyPlan: StudyPlan | null;
+  conceptMap: ConceptMap | null;
+  studySessions: StudySession[];
+  studyGoals: StudyGoal[];
+  bookmarks: BookmarkItem[];
+  currentStudySession: StudySession | null;
+  timerState: {
+    isRunning: boolean;
+    timeLeft: number;
+    mode: 'pomodoro' | 'break' | 'custom';
+    cycles: number;
+  };
 }
 
 type AppAction =
@@ -46,7 +60,20 @@ type AppAction =
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'UPDATE_QUIZ_STATE'; payload: Partial<QuizState> }
   | { type: 'UPDATE_FLASHCARD_STATE'; payload: Partial<FlashcardState> }
-  | { type: 'CLEAR_SESSION' };
+  | { type: 'CLEAR_SESSION' }
+  | { type: 'ADD_STUDY_NOTE'; payload: StudyNote }
+  | { type: 'UPDATE_STUDY_NOTE'; payload: StudyNote }
+  | { type: 'DELETE_STUDY_NOTE'; payload: string }
+  | { type: 'ADD_CITATION'; payload: Citation }
+  | { type: 'SET_STUDY_PLAN'; payload: StudyPlan }
+  | { type: 'UPDATE_STUDY_PLAN'; payload: Partial<StudyPlan> }
+  | { type: 'SET_CONCEPT_MAP'; payload: ConceptMap }
+  | { type: 'ADD_STUDY_SESSION'; payload: StudySession }
+  | { type: 'SET_CURRENT_STUDY_SESSION'; payload: StudySession | null }
+  | { type: 'ADD_STUDY_GOAL'; payload: StudyGoal }
+  | { type: 'UPDATE_STUDY_GOAL'; payload: StudyGoal }
+  | { type: 'ADD_BOOKMARK'; payload: BookmarkItem }
+  | { type: 'UPDATE_TIMER_STATE'; payload: Partial<typeof initialState.timerState> };
 
 const initialState: AppState = {
   theme: (localStorage.getItem('theme') as 'light' | 'dark') || 'light',
@@ -72,6 +99,20 @@ const initialState: AppState = {
   flashcardState: {
     currentCard: 0,
     isFlipped: false,
+  },
+  studyNotes: [],
+  citations: [],
+  studyPlan: null,
+  conceptMap: null,
+  studySessions: [],
+  studyGoals: [],
+  bookmarks: [],
+  currentStudySession: null,
+  timerState: {
+    isRunning: false,
+    timeLeft: 25 * 60, // 25 minutes in seconds
+    mode: 'pomodoro',
+    cycles: 0,
   },
 };
 
@@ -129,11 +170,60 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ...state, 
         flashcardState: { ...state.flashcardState, ...action.payload }
       };
+    case 'ADD_STUDY_NOTE':
+      return { ...state, studyNotes: [...state.studyNotes, action.payload] };
+    case 'UPDATE_STUDY_NOTE':
+      return { 
+        ...state, 
+        studyNotes: state.studyNotes.map(note => 
+          note.id === action.payload.id ? action.payload : note
+        )
+      };
+    case 'DELETE_STUDY_NOTE':
+      return { 
+        ...state, 
+        studyNotes: state.studyNotes.filter(note => note.id !== action.payload)
+      };
+    case 'ADD_CITATION':
+      return { ...state, citations: [...state.citations, action.payload] };
+    case 'SET_STUDY_PLAN':
+      return { ...state, studyPlan: action.payload };
+    case 'UPDATE_STUDY_PLAN':
+      return { 
+        ...state, 
+        studyPlan: state.studyPlan ? { ...state.studyPlan, ...action.payload } : null
+      };
+    case 'SET_CONCEPT_MAP':
+      return { ...state, conceptMap: action.payload };
+    case 'ADD_STUDY_SESSION':
+      return { ...state, studySessions: [...state.studySessions, action.payload] };
+    case 'SET_CURRENT_STUDY_SESSION':
+      return { ...state, currentStudySession: action.payload };
+    case 'ADD_STUDY_GOAL':
+      return { ...state, studyGoals: [...state.studyGoals, action.payload] };
+    case 'UPDATE_STUDY_GOAL':
+      return { 
+        ...state, 
+        studyGoals: state.studyGoals.map(goal => 
+          goal.id === action.payload.id ? action.payload : goal
+        )
+      };
+    case 'ADD_BOOKMARK':
+      return { ...state, bookmarks: [...state.bookmarks, action.payload] };
+    case 'UPDATE_TIMER_STATE':
+      return { 
+        ...state, 
+        timerState: { ...state.timerState, ...action.payload }
+      };
     case 'CLEAR_SESSION':
       return {
         ...initialState,
         theme: state.theme,
         chatMessages: [],
+        studyNotes: state.studyNotes,
+        citations: state.citations,
+        studyGoals: state.studyGoals,
+        bookmarks: state.bookmarks,
       };
     default:
       return state;

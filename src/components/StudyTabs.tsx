@@ -6,7 +6,14 @@ import {
   MessageCircle, 
   BookOpen, 
   Video, 
-  Globe 
+  Globe,
+  StickyNote,
+  Quote,
+  Calendar,
+  Network,
+  BarChart3,
+  Bookmark,
+  Timer
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useApp } from '../contexts/AppContext';
@@ -17,9 +24,16 @@ const tabs = [
   { id: 'flashcards' as TabType, label: 'Flashcards', icon: Brain, color: 'from-purple-500 to-pink-500', bgColor: 'bg-purple-50 dark:bg-purple-900/20' },
   { id: 'quiz' as TabType, label: 'Quiz', icon: HelpCircle, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-50 dark:bg-green-900/20' },
   { id: 'qa' as TabType, label: 'Q&A', icon: MessageCircle, color: 'from-orange-500 to-red-500', bgColor: 'bg-orange-50 dark:bg-orange-900/20' },
+  { id: 'notes' as TabType, label: 'Notes', icon: StickyNote, color: 'from-yellow-500 to-amber-500', bgColor: 'bg-yellow-50 dark:bg-yellow-900/20' },
+  { id: 'planner' as TabType, label: 'Study Plan', icon: Calendar, color: 'from-teal-500 to-cyan-500', bgColor: 'bg-teal-50 dark:bg-teal-900/20' },
+  { id: 'timer' as TabType, label: 'Focus Timer', icon: Timer, color: 'from-rose-500 to-pink-500', bgColor: 'bg-rose-50 dark:bg-rose-900/20' },
   { id: 'research' as TabType, label: 'Research', icon: BookOpen, color: 'from-red-500 to-pink-500', bgColor: 'bg-red-50 dark:bg-red-900/20' },
   { id: 'videos' as TabType, label: 'Videos', icon: Video, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-50 dark:bg-pink-900/20' },
   { id: 'resources' as TabType, label: 'Resources', icon: Globe, color: 'from-indigo-500 to-purple-500', bgColor: 'bg-indigo-50 dark:bg-indigo-900/20' },
+  { id: 'citations' as TabType, label: 'Citations', icon: Quote, color: 'from-slate-500 to-gray-500', bgColor: 'bg-slate-50 dark:bg-slate-900/20' },
+  { id: 'concepts' as TabType, label: 'Mind Map', icon: Network, color: 'from-violet-500 to-purple-500', bgColor: 'bg-violet-50 dark:bg-violet-900/20' },
+  { id: 'analytics' as TabType, label: 'Analytics', icon: BarChart3, color: 'from-emerald-500 to-green-500', bgColor: 'bg-emerald-50 dark:bg-emerald-900/20' },
+  { id: 'bookmarks' as TabType, label: 'Bookmarks', icon: Bookmark, color: 'from-blue-600 to-indigo-600', bgColor: 'bg-blue-50 dark:bg-blue-900/20' },
 ];
 
 export function StudyTabs() {
